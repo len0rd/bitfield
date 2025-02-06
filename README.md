@@ -42,7 +42,7 @@ input        : input JSON filename - must be specified always
 --compact    : compact rendering mode
 --vspace     : vertical space - default 80
 --hspace     : horizontal space - default 640
---lanes      : rectangle lanes - default 2
+--lanes      : rectangle lanes - default 1
 --bits       : overall bitwidth - default 32
 --fontfamily : - default sans-serif
 --fontweight : - default normal
@@ -57,6 +57,7 @@ input        : input JSON filename - must be specified always
 
 --json5      : force json5 input format (need json5 python module)
 --no-json5   : never use json5 input format
+--fontcolor  : color to use for font and stroke. Hex code ("#000000") or name
 ```
 
 ### alpha.json

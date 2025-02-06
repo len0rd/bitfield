@@ -9,6 +9,8 @@ def t(x, y):
 def typeStyle(t):
     return ';fill:' + typeColor(t)
 
+# default color for text and stroke in diagram
+DEFAULT_TXT_STROKE_COLOR = "black"
 
 def typeColor(t):
     styles = {
@@ -42,7 +44,8 @@ class Renderer(object):
                  strokewidth=1,
                  trim=None,
                  uneven=False,
-                 legend=None):
+                 legend=None,
+                 fontcolor=DEFAULT_TXT_STROKE_COLOR):
         if vspace <= 19:
             raise ValueError(
                 'vspace must be greater than 19, got {}.'.format(vspace))
@@ -72,6 +75,7 @@ class Renderer(object):
         self.trim_char_width = trim
         self.uneven = uneven
         self.legend = legend
+        self.fontcolor = fontcolor
 
     def get_total_bits(self, desc):
         return sum(e['bits'] for e in desc)
@@ -148,6 +152,7 @@ class Renderer(object):
                 'font-family': self.fontfamily,
                 'font-weight': self.fontweight,
                 'y': self.fontsize / 1.2,
+                'fill': self.fontcolor,
             }, key])
             x += name_padding
         return items
@@ -175,7 +180,7 @@ class Renderer(object):
         else:
             dy = 0
         res = ['g', {
-            'stroke': 'black',
+            'stroke': self.fontcolor,
             'stroke-width': self.stroke_width,
             'stroke-linecap': 'butt',
             'transform': t(0, dy)
@@ -251,14 +256,16 @@ class Renderer(object):
                     'x': step * lsb_pos,
                     'font-size': self.fontsize,
                     'font-family': self.fontfamily,
-                    'font-weight': self.fontweight
+                    'font-weight': self.fontweight,
+                    'fill': self.fontcolor,
                 }, str(lsb)])
                 if lsbm != msbm:
                     bits.append(['text', {
                         'x': step * msb_pos,
                         'font-size': self.fontsize,
                         'font-family': self.fontfamily,
-                        'font-weight': self.fontweight
+                        'font-weight': self.fontweight,
+                        'fill': self.fontcolor,
                     }, str(msb)])
             if 'name' in e:
                 ltextattrs = {
@@ -266,7 +273,8 @@ class Renderer(object):
                     'font-family': self.fontfamily,
                     'font-weight': self.fontweight,
                     'text-anchor': 'middle',
-                    'y': 6
+                    'y': 6,
+                    'fill': self.fontcolor,
                 }
                 if 'rotate' in e:
                     ltextattrs['transform'] = ' rotate({})'.format(e['rotate'])
@@ -306,13 +314,15 @@ class Renderer(object):
                                 'font-size': self.fontsize,
                                 'font-family': self.fontfamily,
                                 'font-weight': self.fontweight,
+                                'fill': self.fontcolor,
                             }] + tspan(bit_text)]
                     else:
                         atext = [['text', {
                             'x': step * (msb_pos + lsb_pos) / 2,
                             'font-size': self.fontsize,
                             'font-family': self.fontfamily,
-                            'font-weight': self.fontweight
+                            'font-weight': self.fontweight,
+                            'fill': self.fontcolor,
                         }] + tspan(attribute)]
                     attrs.append(['g', {
                         'transform': t(0, i*self.fontsize)
@@ -325,6 +335,7 @@ class Renderer(object):
                         'font-size': self.fontsize,
                         'font-family': self.fontfamily,
                         'font-weight': self.fontweight,
+                        'fill': self.fontcolor,
                     }, str(i if self.vflip else self.mod - i - 1)])
             res = ['g', {}, bits, ['g', {
                 'transform': t(0, self.fontsize*1.2)

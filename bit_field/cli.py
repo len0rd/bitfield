@@ -1,4 +1,4 @@
-from .render import render
+from .render import render, DEFAULT_TXT_STROKE_COLOR
 from .jsonml_stringify import jsonml_stringify
 import argparse
 
@@ -34,6 +34,7 @@ def bit_field_cli():
     parser.add_argument('--trim', help='trim long bitfield names', type=float)
     parser.add_argument('--uneven', help='uneven lanes', action='store_true')
     parser.add_argument('--legend', help='legend item', action='append', nargs=2, metavar=('NAME', 'TYPE'))
+    parser.add_argument("--fontcolor", help='color to use for font and stroke. Hex code ("#000000") or name', default=DEFAULT_TXT_STROKE_COLOR)
     args = parser.parse_args()
 
     # default is json5, unless forced with --(no-)json5
@@ -63,7 +64,8 @@ def bit_field_cli():
                      strokewidth=args.strokewidth,
                      trim=args.trim,
                      uneven=args.uneven,
-                     legend={key: value for key, value in args.legend} if args.legend else None)
+                     legend={key: value for key, value in args.legend} if args.legend else None,
+                     fontcolor=args.fontcolor)
 
     res = jsonml_stringify(res)
     if args.beautify:
