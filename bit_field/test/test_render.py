@@ -15,6 +15,7 @@ from .render_report import render_report
 @pytest.mark.parametrize('strokewidth', [1, 4])
 @pytest.mark.parametrize('trim', [None, 8])
 @pytest.mark.parametrize('uneven', [True])
+@pytest.mark.parametrize('fontcolor', ["black", "blue"])
 def test_render(request,
                 output_dir,
                 input_data,
@@ -25,7 +26,8 @@ def test_render(request,
                 vflip,
                 strokewidth,
                 trim,
-                uneven):
+                uneven,
+                fontcolor):
     res = render(input_data,
                  bits=bits,
                  lanes=lanes,
@@ -34,7 +36,8 @@ def test_render(request,
                  vflip=vflip,
                  strokewidth=strokewidth,
                  trim=trim,
-                 uneven=uneven)
+                 uneven=uneven,
+                 fontcolor=fontcolor)
     res[1]['data-bits'] = bits
     res[1]['data-lanes'] = lanes
     res[1]['data-compact'] = compact
@@ -43,6 +46,7 @@ def test_render(request,
     res[1]['data-strokewidth'] = strokewidth
     res[1]['data-trim'] = trim
     res[1]['data-uneven'] = uneven
+    res[1]['data-fontcolor'] = fontcolor
     res = jsonml_stringify(res)
 
     output_filename = request.node.name
